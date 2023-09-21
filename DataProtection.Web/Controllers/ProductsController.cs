@@ -20,9 +20,12 @@ public class ProductsController : Controller
     {
         var products = await _context.Products.ToListAsync();
 
+        ITimeLimitedDataProtector timeLimitedProtector = _dataProtector.ToTimeLimitedDataProtector();
+
         products.ForEach(x =>
         {
-            x.EncryptedId = _dataProtector.Protect(x.Id.ToString());
+            //x.EncryptedId = _dataProtector.Protect(x.Id.ToString());
+            x.EncryptedId = timeLimitedProtector.Protect(x.Id.ToString(), TimeSpan.FromSeconds(5));
         });
         return View(products);
     }
@@ -34,7 +37,10 @@ public class ProductsController : Controller
         {
             return NotFound();
         }
-        int decryptedId = int.Parse(_dataProtector.Unprotect(id));
+
+        ITimeLimitedDataProtector timeLimitedProtector = _dataProtector.ToTimeLimitedDataProtector();
+        //int decryptedId = int.Parse(_dataProtector.Unprotect(id));
+        int decryptedId = int.Parse(timeLimitedProtector.Unprotect(id));
 
         var product = await _context.Products
             .FirstOrDefaultAsync(m => m.Id == decryptedId);
