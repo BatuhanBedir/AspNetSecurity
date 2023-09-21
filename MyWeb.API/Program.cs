@@ -11,6 +11,10 @@ builder.Services.AddCors(opts =>
         builder.WithOrigins("https://localhost:7270","https://mysitem.com").AllowAnyHeader().AllowAnyMethod();
         //sadece belirtilen siteden gelen isteklere cevap verecek
     });
+    opts.AddPolicy("AllowSites2", builder =>
+    {
+        builder.WithOrigins("https://localhost:7270").WithMethods("POST","GET").AllowAnyHeader();
+    });
 
     //--**--
     //sub-domaini ne olursa olsun kabul et
@@ -54,10 +58,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowSites");
+//app.UseCors("AllowSites");
 //app.UseCors("AllowSites2");
 
-//app.UseCors();
+app.UseCors();
 
 app.UseAuthorization();
 
