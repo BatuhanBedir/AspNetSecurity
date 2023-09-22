@@ -18,8 +18,16 @@
         <br />
         <input type="submit" value="yorum gönder" />
     </form>
-
     <h1>Yorumlar</h1>
+    @if (ViewBag.comments is not null)
+    {
+        @foreach (var item in ViewBag.comments as string[])
+        {
+            <span>@Html.Raw(item)</span>
+            <hr />
+        }
+    }
+    @* <h1>Yorumlar</h1>
     <strong>@ViewBag.name</strong>
     <hr />
     <span>@Html.Raw(ViewBag.comment)</span> @*encode etme*@
