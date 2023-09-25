@@ -30,6 +30,19 @@ public class ProductsController : Controller
         return View(products);
     }
 
+    [HttpPost]
+    public IActionResult Index(string searchText) // ' OR '1'='1' --
+    {
+        //var products = _context.Products.Where(x=>x.Name == searchText).ToList();
+
+        //var products = _context.Products.FromSqlRaw("select * from product where Name=" + "'" + searchText+"'").ToList();
+
+        var products = _context.Products.FromSqlRaw("select * from product where name={0}",searchText).ToList();
+
+        //var products = _context.Products.FromSqlInterpolated($"select * from product where name={searchText}").ToList();
+
+        return View(products);
+    }
     // GET: Products/Details/5
     public async Task<IActionResult> Details(string? id)
     {
