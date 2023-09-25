@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
 using XSS.Web.Models;
 
 namespace XSS.Web.Controllers
@@ -7,10 +8,15 @@ namespace XSS.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly HtmlEncoder _htmlEncoder;
+        private readonly JavaScriptEncoder _javascriptEncoder;
+        private readonly UrlEncoder _urlEncoder;
+        public HomeController(ILogger<HomeController> logger, HtmlEncoder htmlEncoder, JavaScriptEncoder javascriptEncoder, UrlEncoder urlEncoder)
         {
             _logger = logger;
+            _htmlEncoder = htmlEncoder;
+            _javascriptEncoder = javascriptEncoder;
+            _urlEncoder = urlEncoder;
         }
 
         public IActionResult CommentAdd()
@@ -25,9 +31,13 @@ namespace XSS.Web.Controllers
 
             return View();
         }
+        //[ValidateAntiForgeryToken]
+        //[IgnoreAntiforgeryToken]
         [HttpPost]
         public IActionResult CommentAdd(string name, string comment)
         {
+            
+            string encodeName = _urlEncoder.Encode(name);
             ViewBag.name = name;
             ViewBag.comment = comment;
 

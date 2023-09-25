@@ -4,6 +4,7 @@ bb-bb
 -
 aa-www
 qwe-qwe
-aasd-<script>alert('hello')</script>
 <b>Yorumlar çok iyi</b>
-qwe-<script>alert(document.cookie)</script>
+adassa-yorum5
+a-a
+ww-ww
